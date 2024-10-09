@@ -15,6 +15,7 @@ import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { FormError } from "../form-error";
+import { FormSuccess } from "../form-success";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { CardWrapper } from "./card-wrapper";
@@ -26,7 +27,7 @@ export const LoginForm = () => {
       ? "Email already use in different provider!"
       : "";
   const [error, setError] = useState<string | undefined>("");
-  // const [success, setSuccess] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof LoginSchema>>({
@@ -38,10 +39,11 @@ export const LoginForm = () => {
   });
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
     setError("");
-    // setSuccess("");
+    setSuccess("");
     startTransition(() => {
       login(values).then((data) => {
         setError(data?.error);
+        setSuccess(data?.success);
       });
     });
   };
@@ -93,7 +95,7 @@ export const LoginForm = () => {
             />
           </div>
           <FormError message={error || urlError} />
-          {/* <FormSuccess message={success} /> */}
+          <FormSuccess message={success} />
           <Button type="submit" className="w-full">
             Login
           </Button>

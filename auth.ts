@@ -21,13 +21,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
   },
   callbacks: {
-    // async signIn({ user }) {
-    //   const existingUser = (await getUserById(user.id as string)) as User;
-    //   if (!existingUser || !existingUser.emailVerified) {
-    //     return false;
-    //   }
-    //   return true;
-    // },
+    async signIn({ user, account }) {
+      if (account?.provider !== "credentials") return true;
+      const existingUser = (await getUserById(user.id as string)) as User;
+      if (!existingUser || !existingUser.emailVerified) {
+        return false;
+      }
+      return true;
+    },
     async session({ session, token }) {
       console.log("session =", session, "token =", token);
       if (token.sub && session.user) {
