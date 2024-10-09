@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/form";
 import { LoginSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useSearchParams } from "next/navigation";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -19,9 +20,15 @@ import { Input } from "../ui/input";
 import { CardWrapper } from "./card-wrapper";
 
 export const LoginForm = () => {
+  const searchParams = useSearchParams();
+  const urlError =
+    searchParams.get("error") === "OAuthAccountNotLinked"
+      ? "Email already use in different provider!"
+      : "";
   const [error, setError] = useState<string | undefined>("");
   // const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
+
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -85,7 +92,7 @@ export const LoginForm = () => {
               )}
             />
           </div>
-          <FormError message={error} />
+          <FormError message={error || urlError} />
           {/* <FormSuccess message={success} /> */}
           <Button type="submit" className="w-full">
             Login
