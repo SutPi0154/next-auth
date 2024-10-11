@@ -30,7 +30,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return true;
     },
     async session({ session, token }) {
-      console.log("session =", session, "token =", token);
       if (token.sub && session.user) {
         session.user.id = token.sub;
       }
@@ -42,9 +41,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
     async jwt({ token }) {
       if (!token.sub) return token;
-      console.log(token.sub);
       const existingUser = (await getUserById(token.sub)) as User | null;
-      console.log(existingUser);
       if (!existingUser) {
         return token;
       }
