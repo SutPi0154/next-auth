@@ -8,6 +8,7 @@ export const LoginSchema = z.object({
   password: z.string().min(1, {
     message: "password is required",
   }),
+  code: z.optional(z.string()),
 });
 
 // Reset schema
