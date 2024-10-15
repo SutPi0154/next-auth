@@ -1,4 +1,5 @@
 "use server";
+import { getTwoFactorTokenByEmail } from "@/actions/two-factor-token";
 import { signIn } from "@/auth";
 import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
 import { getUserByEmail } from "@/data/user";
@@ -9,7 +10,6 @@ import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { LoginSchema } from "@/schemas";
 import { AuthError } from "next-auth";
 import * as z from "zod";
-import { getTwoFactorTokenByEmail } from "./two-factor-token";
 
 export const login = async (values: z.infer<typeof LoginSchema>) => {
   const validatedField = LoginSchema.safeParse(values);
