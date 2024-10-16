@@ -1,3 +1,4 @@
+"use client";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ExtendedUser } from "@/next-auth";
@@ -6,7 +7,7 @@ interface UserINfoProps {
   label: string;
 }
 
-const UserInfo = async ({ user, label }: UserINfoProps) => {
+const UserInfo = ({ user, label }: UserINfoProps) => {
   return (
     <Card className=" w-[600px] shadow-md">
       <CardHeader>

@@ -22,7 +22,7 @@ import * as z from "zod";
 
 export const NewPasswordForm = () => {
   const token = useSearchParams().get("token");
-  console.log(token);
+
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
@@ -37,7 +37,6 @@ export const NewPasswordForm = () => {
     setError("");
     setSuccess("");
 
-    console.log(values);
     startTransition(() => {
       newPassword(values, token).then((data) => {
         setError(data?.error);

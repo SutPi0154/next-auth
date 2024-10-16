@@ -40,7 +40,6 @@ export const generateVerificationToken = async (email: string) => {
       expires,
     },
   });
-  console.log(verificationToken, "create verification");
   return verificationToken;
 };
 
@@ -61,6 +60,5 @@ export const generatePasswordResetToken = async (email: string) => {
       expires,
     },
   });
-  console.log(passwordResetToken, "create verification");
   return passwordResetToken;
 };

@@ -6,9 +6,8 @@ import { db } from "@/lib/db";
 import { User } from "@prisma/client";
 
 export const newVerification = async (token: string) => {
-  console.log(token, "token");
   const existingToken = await getVerificationTokenByToken(token);
-  console.log(existingToken, "existign token");
+
   if (!existingToken) {
     return { error: "Token does not exist!" };
   }
