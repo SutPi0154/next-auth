@@ -31,10 +31,11 @@ const NewVerificationForm = () => {
         setError(data.error);
       })
       .catch(() => setError("Something went wrong!"));
-  }, [token, success, error]);
+  }, [token, success, error, router]);
+
   useEffect(() => {
     onSubmit();
-  }, [onsubmit]);
+  }, [onSubmit]);
   return (
     <CardWrapper
       headerLabel="confirm your verification"
