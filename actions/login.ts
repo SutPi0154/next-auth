@@ -11,7 +11,10 @@ import { LoginSchema } from "@/schemas";
 import { AuthError } from "next-auth";
 import * as z from "zod";
 
-export const login = async (values: z.infer<typeof LoginSchema>) => {
+export const login = async (
+  values: z.infer<typeof LoginSchema>,
+  callbackUrl?: string
+) => {
   const validatedField = LoginSchema.safeParse(values);
 
   if (!validatedField.success) return { error: "Invalid fields!" };
@@ -22,6 +25,7 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
   if (!existingUser || !existingUser.email || !existingUser.password) {
     return { error: "Email does not exist!" };
   }
+
   if (!existingUser.emailVerified) {
     const newVerificationToken = await generateVerificationToken(
       existingUser.email
@@ -30,8 +34,9 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
       newVerificationToken.email,
       newVerificationToken.token
     );
-    return { success: "confirmation email sent!" };
+    return { success: "Confirmation email sent!", toast: "Check your email!" };
   }
+
   if (existingUser.isTwoFactorEnabled && existingUser.email) {
     if (code) {
       const twoFactorToken = await getTwoFactorTokenByEmail(existingUser.email);
@@ -70,10 +75,9 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
     await signIn("credentials", {
       email,
       password,
-      redirectTo: DEFAULT_LOGIN_REDIRECT,
+      redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
     });
   } catch (error) {
-    //todo
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":

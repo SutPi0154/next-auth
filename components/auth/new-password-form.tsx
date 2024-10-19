@@ -15,10 +15,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { NewPasswordSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import * as z from "zod";
+import { Toaster } from "../ui/sonner";
 
 export const NewPasswordForm = () => {
   const token = useSearchParams().get("token");
@@ -26,7 +28,7 @@ export const NewPasswordForm = () => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
-
+  const router = useRouter();
   const form = useForm<z.infer<typeof NewPasswordSchema>>({
     resolver: zodResolver(NewPasswordSchema),
     defaultValues: {
@@ -41,6 +43,10 @@ export const NewPasswordForm = () => {
       newPassword(values, token).then((data) => {
         setError(data?.error);
         setSuccess(data?.success);
+        if (data?.success) {
+          router.push("/auth/login");
+          toast.success("Please login again!", { position: "bottom-right" });
+        }
       });
     });
   };
@@ -79,6 +85,7 @@ export const NewPasswordForm = () => {
           </Button>
         </form>
       </Form>
+      <Toaster position="top-center" />
     </CardWrapper>
   );
 };

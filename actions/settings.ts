@@ -1,6 +1,5 @@
 "use server";
 
-import { unstable_update } from "@/auth";
 import { getUserByEmail, getUserById } from "@/data/user";
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -31,6 +30,7 @@ export const settings = async (values: z.infer<typeof settingsSchema>) => {
     values.newPassword = undefined;
     values.isTwoFactorEnabled = undefined;
   }
+
   if (values.email && values.email !== user.email) {
     const existingUser = await getUserByEmail(values.email as string);
     if (existingUser && existingUser.id !== user.id)
@@ -60,13 +60,5 @@ export const settings = async (values: z.infer<typeof settingsSchema>) => {
     data: { ...values },
   });
 
-  unstable_update({
-    user: {
-      name: updatedUser.name,
-      email: updatedUser.email,
-      isTwoFactorEnabled: updatedUser.isTwoFactorEnabled,
-      role: updatedUser.role,
-    },
-  });
   return { success: "already update" };
 };

@@ -15,14 +15,19 @@ import {
 import { Input } from "@/components/ui/input";
 import { LoginSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import * as z from "zod";
 
 export const LoginForm = () => {
+  const { update } = useSession();
   const searchParams = useSearchParams();
+
+  const callbackUrl = searchParams.get("callbackUrl") as string;
   const urlError =
     searchParams.get("error") === "OAuthAccountNotLinked"
       ? "Email already use in different provider!"
@@ -31,7 +36,6 @@ export const LoginForm = () => {
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
   const [showTwoFactor, setShowTwoFactor] = useState<boolean>(false);
-
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -43,15 +47,17 @@ export const LoginForm = () => {
     setError("");
     setSuccess("");
     startTransition(() => {
-      login(values)
+      login(values, callbackUrl)
         .then((data) => {
           if (data?.error) {
             form.reset();
             setError(data.error);
           }
           if (data?.success) {
+            update();
             form.reset();
             setSuccess(data.success);
+            toast.success(data.toast, { position: "bottom-right" });
           }
           if (data?.twoFactor) {
             setShowTwoFactor(true);

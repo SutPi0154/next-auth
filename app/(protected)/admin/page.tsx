@@ -14,18 +14,18 @@ const AdminPage = () => {
   const onServerActionClick = async () => {
     await admin().then((data) => {
       if (data.success) {
-        return toast.success(data.success);
+        return toast.success(data.success, { position: "bottom-right" });
       } else if (data.error) {
-        return toast.error(data.error);
+        return toast.error(data.error, { position: "bottom-right" });
       }
     });
   };
   const onApiRouteCLick = async () => {
     await fetch("/api/admin").then((response) => {
       if (response.ok) {
-        toast.success("allowed api route");
+        toast.success("Allowed api route", { position: "bottom-right" });
       } else {
-        toast.error("Forbidden  API route");
+        toast.error("Forbidden  API route", { position: "bottom-right" });
       }
     });
   };

@@ -17,6 +17,7 @@ import { ResetSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import * as z from "zod";
 
 export const ResetForm = () => {
@@ -38,6 +39,9 @@ export const ResetForm = () => {
       reset(values).then((data) => {
         setError(data?.error);
         setSuccess(data?.success);
+        if (data.success) {
+          toast.success("Check your email!", { position: "bottom-right" });
+        }
       });
     });
   };

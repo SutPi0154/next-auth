@@ -18,7 +18,7 @@ export default async function RootLayout({
   return (
     <SessionProvider session={session}>
       <html lang="en">
-        <Toaster />
+        <Toaster position="bottom-right" />
         <body className={` antialiased`}>{children}</body>
       </html>
     </SessionProvider>

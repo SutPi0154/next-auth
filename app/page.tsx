@@ -22,7 +22,7 @@ export default function Home() {
         <p className={cn(" text-white text-lg mt-0 mb-3", font.className)}>
           A simple authentication service{" "}
         </p>
-        <LoginButton>
+        <LoginButton asChild>
           <Button variant={"secondary"} size={"lg"} className=" text-md">
             Sign in
           </Button>
